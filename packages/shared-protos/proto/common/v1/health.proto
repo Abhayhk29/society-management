@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package society.common.v1;
+
+// Placeholder proto — add shared message definitions here.
+
+message HealthCheck {
+  string service = 1;
+  string status = 2;
+}

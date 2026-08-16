@@ -1,0 +1,10 @@
+{
+  "name": "service-analytics",
+  "version": "0.0.1",
+  "private": true,
+  "description": "FastAPI service for PDF generation and AI analytics",
+  "scripts": {
+    "dev": ".venv\\Scripts\\python -m app",
+    "start": ".venv\\Scripts\\python -m app --no-reload"
+  }
+}

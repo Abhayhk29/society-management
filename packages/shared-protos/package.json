@@ -1,0 +1,9 @@
+{
+  "name": "shared-protos",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Single source of truth for all .proto files",
+  "files": [
+    "proto"
+  ]
+}
