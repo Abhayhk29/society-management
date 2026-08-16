@@ -5,6 +5,7 @@
   "description": "FastAPI service for PDF generation and AI analytics",
   "scripts": {
     "dev": ".venv\\Scripts\\python -m app",
-    "start": ".venv\\Scripts\\python -m app --no-reload"
+    "start": ".venv\\Scripts\\python -m app --no-reload",
+    "grpc:generate": ".venv\\Scripts\\python scripts/generate_grpc.py"
   }
 }

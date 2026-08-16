@@ -22,6 +22,7 @@ class Settings(BaseSettings):
 
     port: int = 3004
     host: str = "0.0.0.0"
+    grpc_url: str = "0.0.0.0:50053"
 
 
 @lru_cache
