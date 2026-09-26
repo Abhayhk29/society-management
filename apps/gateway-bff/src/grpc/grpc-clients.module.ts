@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { HEALTH_PACKAGE, healthProto } from 'shared-protos';
-import { GrpcHealthController } from './grpc-health.controller';
-import { GrpcHealthService } from './grpc-health.service';
+import {
+  CORE_PACKAGE,
+  HEALTH_PACKAGE,
+  healthProto,
+  userProto,
+} from 'shared-protos';
+import { GrpcHealthController } from './grpc-health.controller.js';
+import { GrpcHealthService } from './grpc-health.service.js';
 
 export const CORE_GRPC = 'CORE_GRPC';
 export const REALTIME_GRPC = 'REALTIME_GRPC';
@@ -27,8 +32,8 @@ const loader = {
         useFactory: (config: ConfigService) => ({
           transport: Transport.GRPC,
           options: {
-            package: HEALTH_PACKAGE,
-            protoPath: healthProto,
+            package: [HEALTH_PACKAGE, CORE_PACKAGE],
+            protoPath: [healthProto, userProto],
             url: config.get<string>('CORE_GRPC_URL', 'localhost:50051'),
             loader,
           },
@@ -66,5 +71,6 @@ const loader = {
   ],
   controllers: [GrpcHealthController],
   providers: [GrpcHealthService],
+  exports: [ClientsModule],
 })
 export class GrpcClientsModule {}

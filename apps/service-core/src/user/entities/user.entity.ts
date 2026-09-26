@@ -40,6 +40,9 @@ export class User {
   @Column({ name: 'last_login', type: 'timestamp', nullable: true })
   lastLogin: Date | null;
 
+  @Column({ name: 'phone_verified_at', type: 'timestamp', nullable: true })
+  phoneVerifiedAt: Date | null;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 

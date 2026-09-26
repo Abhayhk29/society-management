@@ -1,0 +1,76 @@
+.page {
+  min-height: 100vh;
+  padding: 1.5rem 4vw 3rem;
+  animation: fadeIn 0.45s ease both;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--moss-deep);
+}
+
+.muted {
+  color: var(--stone);
+}
+
+.logout {
+  min-height: 2.5rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+}
+
+.logout:hover {
+  border-color: var(--moss);
+  color: var(--moss-deep);
+}
+
+.panel {
+  max-width: 640px;
+  animation: riseIn 0.55s ease both;
+}
+
+.panel h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 1.25rem;
+}
+
+.meta {
+  display: grid;
+  gap: 1rem;
+}
+
+.meta div {
+  display: grid;
+  gap: 0.2rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.meta dt {
+  font-size: 0.85rem;
+  color: var(--stone);
+}
+
+.meta dd {
+  font-size: 1.05rem;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding-inline: 1.25rem;
+  }
+}
