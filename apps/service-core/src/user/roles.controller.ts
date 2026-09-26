@@ -39,10 +39,7 @@ export class RolesController {
   }
 
   @Patch(':uid')
-  update(
-    @Param('uid', ParseUUIDPipe) uid: string,
-    @Body() dto: UpdateRoleDto,
-  ) {
+  update(@Param('uid', ParseUUIDPipe) uid: string, @Body() dto: UpdateRoleDto) {
     return this.rolesService.update(uid, dto);
   }
 

@@ -1,0 +1,21 @@
+FROM node:20-bookworm-slim AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+COPY packages ./packages
+COPY apps ./apps
+RUN npm ci \
+  && npm run build --workspace=@society/nest-config \
+  && npm run build --workspace=gateway-bff
+
+FROM node:20-bookworm-slim AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV SERVICE_NAME=gateway-bff
+ENV LOG_FORMAT=json
+COPY --from=build /app/package.json /app/package-lock.json ./
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/packages ./packages
+COPY --from=build /app/apps/gateway-bff ./apps/gateway-bff
+WORKDIR /app/apps/gateway-bff
+EXPOSE 3001
+CMD ["node", "dist/main.js"]

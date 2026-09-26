@@ -1,0 +1,245 @@
+syntax = "proto3";
+
+package society.core.v1;
+
+import "core/v1/user.proto";
+
+service SocietyService {
+  rpc CreateSociety (CreateSocietyRequest) returns (SocietyResponse);
+  rpc ListSocieties (Empty) returns (ListSocietiesResponse);
+  rpc GetSociety (GetByIdRequest) returns (SocietyResponse);
+  rpc UpdateSociety (UpdateSocietyRequest) returns (SocietyResponse);
+  rpc DeleteSociety (GetByIdRequest) returns (SocietyResponse);
+}
+
+service BuildingService {
+  rpc CreateBuilding (CreateBuildingRequest) returns (BuildingResponse);
+  rpc ListBuildingsBySociety (GetByIdRequest) returns (ListBuildingsResponse);
+  rpc GetBuilding (GetByIdRequest) returns (BuildingResponse);
+  rpc UpdateBuilding (UpdateBuildingRequest) returns (BuildingResponse);
+  rpc DeleteBuilding (GetByIdRequest) returns (BuildingResponse);
+}
+
+service FlatService {
+  rpc CreateFlat (CreateFlatRequest) returns (FlatResponse);
+  rpc ListFlatsByBuilding (GetByIdRequest) returns (ListFlatsResponse);
+  rpc GetFlat (GetByIdRequest) returns (FlatResponse);
+  rpc UpdateFlat (UpdateFlatRequest) returns (FlatResponse);
+  rpc DeleteFlat (GetByIdRequest) returns (FlatResponse);
+}
+
+service MembershipService {
+  rpc CreateMembership (CreateMembershipRequest) returns (MembershipResponse);
+  rpc ListMembershipsBySociety (GetByIdRequest) returns (ListMembershipsResponse);
+  rpc ListMembershipsByUser (GetByIdRequest) returns (ListMembershipsResponse);
+  rpc GetMembership (GetByIdRequest) returns (MembershipResponse);
+  rpc UpdateMembership (UpdateMembershipRequest) returns (MembershipResponse);
+  rpc DeleteMembership (GetByIdRequest) returns (MembershipResponse);
+}
+
+message SocietyResponse {
+  string uid = 1;
+  string name = 2;
+  string code = 3;
+  string address = 4;
+  string city = 5;
+  string state = 6;
+  string pincode = 7;
+  string description = 8;
+  bool is_active = 9;
+  string created_at = 10;
+  string updated_at = 11;
+}
+
+message CreateSocietyRequest {
+  string name = 1;
+  string code = 2;
+  string address = 3;
+  string city = 4;
+  string state = 5;
+  string pincode = 6;
+  string description = 7;
+  bool is_active = 8;
+  bool has_is_active = 9;
+}
+
+message UpdateSocietyRequest {
+  string uid = 1;
+  string name = 2;
+  string code = 3;
+  string address = 4;
+  string city = 5;
+  string state = 6;
+  string pincode = 7;
+  string description = 8;
+  bool is_active = 9;
+  bool has_name = 10;
+  bool has_code = 11;
+  bool has_address = 12;
+  bool has_city = 13;
+  bool has_state = 14;
+  bool has_pincode = 15;
+  bool has_description = 16;
+  bool has_is_active = 17;
+  bool clear_address = 18;
+  bool clear_city = 19;
+  bool clear_state = 20;
+  bool clear_pincode = 21;
+  bool clear_description = 22;
+}
+
+message ListSocietiesResponse {
+  repeated SocietyResponse societies = 1;
+}
+
+message BuildingResponse {
+  string uid = 1;
+  string society_id = 2;
+  string name = 3;
+  string code = 4;
+  int32 total_floors = 5;
+  string description = 6;
+  bool is_active = 7;
+  string created_at = 8;
+  string updated_at = 9;
+  bool has_total_floors = 10;
+}
+
+message CreateBuildingRequest {
+  string society_id = 1;
+  string name = 2;
+  string code = 3;
+  int32 total_floors = 4;
+  string description = 5;
+  bool is_active = 6;
+  bool has_total_floors = 7;
+  bool has_is_active = 8;
+}
+
+message UpdateBuildingRequest {
+  string uid = 1;
+  string name = 2;
+  string code = 3;
+  int32 total_floors = 4;
+  string description = 5;
+  bool is_active = 6;
+  bool has_name = 7;
+  bool has_code = 8;
+  bool has_total_floors = 9;
+  bool has_description = 10;
+  bool has_is_active = 11;
+  bool clear_total_floors = 12;
+  bool clear_description = 13;
+}
+
+message ListBuildingsResponse {
+  repeated BuildingResponse buildings = 1;
+}
+
+message FlatResponse {
+  string uid = 1;
+  string building_id = 2;
+  string society_id = 3;
+  string number = 4;
+  int32 floor = 5;
+  string unit_type = 6;
+  double area_sq_ft = 7;
+  string description = 8;
+  bool is_active = 9;
+  string created_at = 10;
+  string updated_at = 11;
+  bool has_floor = 12;
+  bool has_area_sq_ft = 13;
+}
+
+message CreateFlatRequest {
+  string building_id = 1;
+  string number = 2;
+  int32 floor = 3;
+  string unit_type = 4;
+  double area_sq_ft = 5;
+  string description = 6;
+  bool is_active = 7;
+  bool has_floor = 8;
+  bool has_area_sq_ft = 9;
+  bool has_is_active = 10;
+}
+
+message UpdateFlatRequest {
+  string uid = 1;
+  string number = 2;
+  int32 floor = 3;
+  string unit_type = 4;
+  double area_sq_ft = 5;
+  string description = 6;
+  bool is_active = 7;
+  bool has_number = 8;
+  bool has_floor = 9;
+  bool has_unit_type = 10;
+  bool has_area_sq_ft = 11;
+  bool has_description = 12;
+  bool has_is_active = 13;
+  bool clear_floor = 14;
+  bool clear_unit_type = 15;
+  bool clear_area_sq_ft = 16;
+  bool clear_description = 17;
+}
+
+message ListFlatsResponse {
+  repeated FlatResponse flats = 1;
+}
+
+message MembershipResponse {
+  string uid = 1;
+  string user_id = 2;
+  string society_id = 3;
+  string flat_id = 4;
+  string type = 5;
+  string status = 6;
+  bool is_primary = 7;
+  string started_at = 8;
+  string ended_at = 9;
+  string created_at = 10;
+  string updated_at = 11;
+  string user_email = 12;
+  string user_name = 13;
+  string flat_number = 14;
+  bool has_flat_id = 15;
+}
+
+message CreateMembershipRequest {
+  string user_id = 1;
+  string society_id = 2;
+  string flat_id = 3;
+  string type = 4;
+  string status = 5;
+  bool is_primary = 6;
+  string started_at = 7;
+  string ended_at = 8;
+  bool has_flat_id = 9;
+  bool has_status = 10;
+  bool has_is_primary = 11;
+}
+
+message UpdateMembershipRequest {
+  string uid = 1;
+  string flat_id = 2;
+  string type = 3;
+  string status = 4;
+  bool is_primary = 5;
+  string started_at = 6;
+  string ended_at = 7;
+  bool has_flat_id = 8;
+  bool clear_flat_id = 9;
+  bool has_type = 10;
+  bool has_status = 11;
+  bool has_is_primary = 12;
+  bool has_started_at = 13;
+  bool clear_started_at = 14;
+  bool has_ended_at = 15;
+  bool clear_ended_at = 16;
+}
+
+message ListMembershipsResponse {
+  repeated MembershipResponse memberships = 1;
+}

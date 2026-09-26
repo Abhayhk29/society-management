@@ -28,7 +28,9 @@ export class PermissionsService {
   }
 
   findAll() {
-    return this.permissionsRepo.find({ order: { module: 'ASC', action: 'ASC' } });
+    return this.permissionsRepo.find({
+      order: { module: 'ASC', action: 'ASC' },
+    });
   }
 
   async findOne(uid: string) {

@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package society.analytics.v1;
+
+service ReceiptPdfService {
+  rpc GenerateReceiptPdf (GenerateReceiptPdfRequest) returns (GenerateReceiptPdfResponse);
+}
+
+service InsightsService {
+  rpc GenerateSocietyInsights (GenerateSocietyInsightsRequest) returns (GenerateSocietyInsightsResponse);
+}
+
+message GenerateReceiptPdfRequest {
+  string receipt_number = 1;
+  string issued_at = 2;
+  string society_id = 3;
+  string snapshot_json = 4;
+  string brand_name = 5;
+}
+
+message GenerateReceiptPdfResponse {
+  bytes pdf_bytes = 1;
+  string filename = 2;
+  string content_type = 3;
+}
+
+message GenerateSocietyInsightsRequest {
+  string society_id = 1;
+  string society_name = 2;
+  int32 bills_total = 3;
+  int32 bills_paid = 4;
+  int32 bills_overdue = 5;
+  double revenue_collected = 6;
+  double revenue_outstanding = 7;
+  int32 complaints_open = 8;
+  int32 complaints_resolved = 9;
+  int32 work_orders_open = 10;
+  int32 work_orders_completed = 11;
+  int32 visitors_expected = 12;
+  string period_label = 13;
+}
+
+message InsightItem {
+  string category = 1;
+  string title = 2;
+  string detail = 3;
+  string severity = 4;
+  double score = 5;
+}
+
+message GenerateSocietyInsightsResponse {
+  string society_id = 1;
+  string summary = 2;
+  repeated InsightItem insights = 3;
+  string generated_at = 4;
+  string model = 5;
+}

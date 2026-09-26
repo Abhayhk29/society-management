@@ -9,16 +9,23 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import { PermissionsGuard } from '../auth/permissions.guard.js';
 import { RequirePermissions } from '../auth/require-permissions.decorator.js';
 import { CoreRbacService } from './core-rbac.service.js';
+import { CoreSocietyService } from './core-society.service.js';
 import { AssignRoleDto, CreateUserDto, UpdateUserDto } from './dto/user.dto.js';
 
+@ApiTags('users')
+@ApiBearerAuth('access-token')
 @Controller('users')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class UsersController {
-  constructor(private readonly coreRbac: CoreRbacService) {}
+  constructor(
+    private readonly coreRbac: CoreRbacService,
+    private readonly coreSociety: CoreSocietyService,
+  ) {}
 
   @Post()
   @RequirePermissions('create:user')
@@ -40,10 +47,7 @@ export class UsersController {
 
   @Patch(':uid')
   @RequirePermissions('update:user')
-  update(
-    @Param('uid', ParseUUIDPipe) uid: string,
-    @Body() dto: UpdateUserDto,
-  ) {
+  update(@Param('uid', ParseUUIDPipe) uid: string, @Body() dto: UpdateUserDto) {
     return this.coreRbac.updateUser(
       uid,
       dto as unknown as Record<string, unknown>,
@@ -54,6 +58,12 @@ export class UsersController {
   @RequirePermissions('delete:user')
   remove(@Param('uid', ParseUUIDPipe) uid: string) {
     return this.coreRbac.deleteUser(uid);
+  }
+
+  @Get(':uid/memberships')
+  @RequirePermissions('view:membership')
+  listMemberships(@Param('uid', ParseUUIDPipe) uid: string) {
+    return this.coreSociety.listMembershipsByUser(uid);
   }
 
   @Get(':uid/roles')

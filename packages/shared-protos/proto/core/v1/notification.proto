@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package society.core.v1;
+
+import "core/v1/user.proto";
+
+service NotificationService {
+  rpc EnqueueNotification (EnqueueNotificationRequest) returns (EnqueueNotificationResponse);
+  rpc ListNotifications (ListNotificationsRequest) returns (ListNotificationsResponse);
+  rpc MarkNotificationRead (MarkReadRequest) returns (NotificationResponse);
+  rpc MarkAllNotificationsRead (MarkAllReadRequest) returns (MarkAllReadResponse);
+  rpc GetUnreadCount (GetUnreadCountRequest) returns (UnreadCountResponse);
+  rpc GetPreferences (GetByIdRequest) returns (PreferencesResponse);
+  rpc UpdatePreferences (UpdatePreferencesRequest) returns (PreferencesResponse);
+}
+
+message EnqueueNotificationRequest {
+  repeated string user_ids = 1;
+  string society_id = 2;
+  bool has_society_id = 3;
+  string type = 4;
+  string title = 5;
+  string body = 6;
+  string payload_json = 7;
+  repeated string channels = 8;
+  string source_service = 9;
+  string actor_user_id = 10;
+}
+
+message EnqueueNotificationResponse {
+  repeated NotificationResponse notifications = 1;
+  int32 created_count = 2;
+}
+
+message ListNotificationsRequest {
+  string actor_user_id = 1;
+  bool unread_only = 2;
+  int32 limit = 3;
+  string society_id = 4;
+  bool has_society_id = 5;
+}
+
+message MarkReadRequest {
+  string uid = 1;
+  string actor_user_id = 2;
+}
+
+message MarkAllReadRequest {
+  string actor_user_id = 1;
+}
+
+message MarkAllReadResponse {
+  int32 updated_count = 1;
+}
+
+message GetUnreadCountRequest {
+  string actor_user_id = 1;
+}
+
+message UnreadCountResponse {
+  int32 count = 1;
+}
+
+message NotificationResponse {
+  string uid = 1;
+  string user_id = 2;
+  string society_id = 3;
+  string channel = 4;
+  string type = 5;
+  string title = 6;
+  string body = 7;
+  string payload_json = 8;
+  string status = 9;
+  string source_service = 10;
+  string read_at = 11;
+  string sent_at = 12;
+  string created_at = 13;
+  string updated_at = 14;
+}
+
+message ListNotificationsResponse {
+  repeated NotificationResponse notifications = 1;
+}
+
+message UpdatePreferencesRequest {
+  string user_id = 1;
+  bool email_enabled = 2;
+  bool sms_enabled = 3;
+  bool push_enabled = 4;
+  bool in_app_enabled = 5;
+  bool has_email_enabled = 6;
+  bool has_sms_enabled = 7;
+  bool has_push_enabled = 8;
+  bool has_in_app_enabled = 9;
+  string muted_types = 10;
+  bool has_muted_types = 11;
+}
+
+message PreferencesResponse {
+  string uid = 1;
+  string user_id = 2;
+  bool email_enabled = 3;
+  bool sms_enabled = 4;
+  bool push_enabled = 5;
+  bool in_app_enabled = 6;
+  string muted_types = 7;
+  string created_at = 8;
+  string updated_at = 9;
+}

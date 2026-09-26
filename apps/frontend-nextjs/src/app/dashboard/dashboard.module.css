@@ -1,56 +1,68 @@
-.page {
-  min-height: 100vh;
-  padding: 1.5rem 4vw 3rem;
-  animation: fadeIn 0.45s ease both;
+.hero {
+  margin-bottom: 2rem;
+  max-width: 40rem;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.blurb {
+  color: var(--stone);
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.rolePill {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--moss-deep);
+  border-bottom: 1px solid var(--moss);
+  padding-bottom: 0.15rem;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.brand {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  color: var(--moss-deep);
+.tile {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--line);
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.muted {
+.tile:hover {
+  color: var(--moss-deep);
+  border-top-color: var(--moss);
+}
+
+.tileLabel {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+
+.tileHint {
+  font-size: 0.9rem;
   color: var(--stone);
-}
-
-.logout {
-  min-height: 2.5rem;
-  padding: 0.55rem 1.1rem;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: #fff;
-  cursor: pointer;
-}
-
-.logout:hover {
-  border-color: var(--moss);
-  color: var(--moss-deep);
-}
-
-.panel {
-  max-width: 640px;
-  animation: riseIn 0.55s ease both;
-}
-
-.panel h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  letter-spacing: -0.03em;
-  margin-bottom: 1.25rem;
 }
 
 .meta {
   display: grid;
   gap: 1rem;
+  max-width: 36rem;
 }
 
 .meta div {
@@ -69,8 +81,12 @@
   font-size: 1.05rem;
 }
 
-@media (max-width: 640px) {
-  .page {
-    padding-inline: 1.25rem;
-  }
+.muted {
+  color: var(--stone);
+}
+
+.loading {
+  min-height: 100vh;
+  padding: 1.5rem 4vw;
+  color: var(--stone);
 }

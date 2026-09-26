@@ -2,10 +2,20 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import {
+  ANALYTICS_PACKAGE,
   CORE_PACKAGE,
   HEALTH_PACKAGE,
+  REALTIME_PACKAGE,
+  analyticsProto,
+  billingProto,
+  communityProto,
+  gatePassProto,
   healthProto,
+  notificationProto,
+  protoRoot,
+  societyProto,
   userProto,
+  vendorProto,
 } from 'shared-protos';
 import { GrpcHealthController } from './grpc-health.controller.js';
 import { GrpcHealthService } from './grpc-health.service.js';
@@ -20,6 +30,7 @@ const loader = {
   enums: String,
   defaults: true,
   oneofs: true,
+  includeDirs: [protoRoot],
 };
 
 @Module({
@@ -33,7 +44,15 @@ const loader = {
           transport: Transport.GRPC,
           options: {
             package: [HEALTH_PACKAGE, CORE_PACKAGE],
-            protoPath: [healthProto, userProto],
+            protoPath: [
+              healthProto,
+              userProto,
+              societyProto,
+              billingProto,
+              communityProto,
+              vendorProto,
+              notificationProto,
+            ],
             url: config.get<string>('CORE_GRPC_URL', 'localhost:50051'),
             loader,
           },
@@ -46,8 +65,8 @@ const loader = {
         useFactory: (config: ConfigService) => ({
           transport: Transport.GRPC,
           options: {
-            package: HEALTH_PACKAGE,
-            protoPath: healthProto,
+            package: [HEALTH_PACKAGE, REALTIME_PACKAGE],
+            protoPath: [healthProto, gatePassProto],
             url: config.get<string>('REALTIME_GRPC_URL', 'localhost:50052'),
             loader,
           },
@@ -60,8 +79,8 @@ const loader = {
         useFactory: (config: ConfigService) => ({
           transport: Transport.GRPC,
           options: {
-            package: HEALTH_PACKAGE,
-            protoPath: healthProto,
+            package: [HEALTH_PACKAGE, ANALYTICS_PACKAGE],
+            protoPath: [healthProto, analyticsProto],
             url: config.get<string>('ANALYTICS_GRPC_URL', 'localhost:50053'),
             loader,
           },

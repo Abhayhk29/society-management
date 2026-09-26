@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package society.realtime.v1;
+
+service GatePassService {
+  rpc CreateGatePass (CreateGatePassRequest) returns (GatePassResponse);
+  rpc GetGatePass (GetGatePassRequest) returns (GatePassResponse);
+  rpc ListGatePasses (ListGatePassesRequest) returns (ListGatePassesResponse);
+  rpc ApproveGatePass (ApproveGatePassRequest) returns (GatePassResponse);
+  rpc RejectGatePass (RejectGatePassRequest) returns (GatePassResponse);
+  rpc CancelGatePass (CancelGatePassRequest) returns (GatePassResponse);
+  rpc VerifyQr (VerifyQrRequest) returns (VerifyQrResponse);
+}
+
+message CreateGatePassRequest {
+  string society_id = 1;
+  string flat_id = 2;
+  string visitor_name = 3;
+  string visitor_phone = 4;
+  string purpose = 5;
+  string valid_from = 6;
+  string valid_until = 7;
+  string actor_user_id = 8;
+  repeated string actor_permissions = 9;
+  bool has_flat_id = 10;
+}
+
+message GetGatePassRequest {
+  string uid = 1;
+  string actor_user_id = 2;
+  repeated string actor_permissions = 3;
+}
+
+message ListGatePassesRequest {
+  string society_id = 1;
+  string actor_user_id = 2;
+  repeated string actor_permissions = 3;
+  string status = 4;
+  bool has_status = 5;
+}
+
+message ApproveGatePassRequest {
+  string uid = 1;
+  string actor_user_id = 2;
+  repeated string actor_permissions = 3;
+}
+
+message RejectGatePassRequest {
+  string uid = 1;
+  string reason = 2;
+  string actor_user_id = 3;
+  repeated string actor_permissions = 4;
+}
+
+message CancelGatePassRequest {
+  string uid = 1;
+  string actor_user_id = 2;
+  repeated string actor_permissions = 3;
+}
+
+message VerifyQrRequest {
+  string qr_payload = 1;
+  string actor_user_id = 2;
+  repeated string actor_permissions = 3;
+}
+
+message GatePassResponse {
+  string uid = 1;
+  string society_id = 2;
+  string flat_id = 3;
+  string visitor_name = 4;
+  string visitor_phone = 5;
+  string purpose = 6;
+  string created_by_user_id = 7;
+  string approved_by_user_id = 8;
+  string status = 9;
+  string valid_from = 10;
+  string valid_until = 11;
+  string qr_payload = 12;
+  string used_at = 13;
+  string rejected_reason = 14;
+  string created_at = 15;
+  string updated_at = 16;
+  bool has_flat_id = 17;
+  bool has_qr_payload = 18;
+}
+
+message ListGatePassesResponse {
+  repeated GatePassResponse gate_passes = 1;
+}
+
+message VerifyQrResponse {
+  bool valid = 1;
+  string message = 2;
+  GatePassResponse gate_pass = 3;
+  bool has_gate_pass = 4;
+}

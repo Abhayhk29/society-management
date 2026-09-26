@@ -13,7 +13,12 @@
     "dev:realtime": "npm run dev --workspace=service-realtime",
     "dev:analytics": "npm run dev --workspace=service-analytics",
     "build": "npm run build --workspaces --if-present",
-    "lint": "npm run lint --workspaces --if-present"
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:ensure": "npm run db:ensure --workspace=service-core && npm run db:ensure --workspace=service-realtime",
+    "migration:run": "npm run migration:run --workspace=service-core",
+    "compose:up": "docker compose up --build -d",
+    "compose:down": "docker compose down"
   },
   "devDependencies": {
   }

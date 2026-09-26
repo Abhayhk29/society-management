@@ -189,8 +189,7 @@ export class CoreRbacService implements OnModuleInit {
 
   resetPassword(token: string, newPassword: string) {
     return this.call(
-      (metadata) =>
-        this.auth.resetPassword({ token, newPassword }, metadata),
+      (metadata) => this.auth.resetPassword({ token, newPassword }, metadata),
       false,
     );
   }
@@ -297,9 +296,7 @@ export class CoreRbacService implements OnModuleInit {
   }
 
   listUserRoles(uid: string) {
-    return this.call((metadata) =>
-      this.users.listUserRoles({ uid }, metadata),
-    );
+    return this.call((metadata) => this.users.listUserRoles({ uid }, metadata));
   }
 
   assignRole(uid: string, roleId: string) {

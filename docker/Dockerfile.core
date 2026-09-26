@@ -1,0 +1,23 @@
+FROM node:20-bookworm-slim AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+COPY packages ./packages
+COPY apps ./apps
+RUN npm ci \
+  && npm run build --workspace=@society/nest-config \
+  && npm run build --workspace=service-core
+
+FROM node:20-bookworm-slim AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV SERVICE_NAME=service-core
+ENV LOG_FORMAT=json
+ENV DB_SYNC=false
+ENV DB_MIGRATIONS_RUN=true
+COPY --from=build /app/package.json /app/package-lock.json ./
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/packages ./packages
+COPY --from=build /app/apps/service-core ./apps/service-core
+WORKDIR /app/apps/service-core
+EXPOSE 3008 50051
+CMD ["node", "dist/main.js"]

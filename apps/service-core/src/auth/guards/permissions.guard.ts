@@ -41,6 +41,6 @@ export class PermissionsGuard implements CanActivate {
     if (context.getType() === 'http') {
       return context.switchToHttp().getRequest().user as AuthUser | undefined;
     }
-    return (context.switchToRpc().getContext() as { user?: AuthUser }).user;
+    return context.switchToRpc().getContext().user;
   }
 }

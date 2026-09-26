@@ -1,0 +1,172 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  service-core:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.core
+    environment:
+      PORT: 3008
+      GRPC_URL: 0.0.0.0:50051
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: ${POSTGRES_USER:-postgres}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      DB_NAME: society_core
+      DB_SYNC: "false"
+      DB_MIGRATIONS_RUN: "true"
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      INTERNAL_SERVICE_KEY: ${INTERNAL_SERVICE_KEY:-dev-internal-service-key}
+      LOG_FORMAT: json
+      SERVICE_NAME: service-core
+      REDIS_URL: redis://redis:6379
+      THROTTLE_STORAGE: redis
+    ports:
+      - "3008:3008"
+      - "50051:50051"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3008/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+  service-realtime:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.realtime
+    environment:
+      PORT: 3003
+      GRPC_URL: 0.0.0.0:50052
+      CORE_GRPC_URL: service-core:50051
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:3000}
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      GATE_PASS_QR_SECRET: ${GATE_PASS_QR_SECRET:-change-me-in-production}
+      INTERNAL_SERVICE_KEY: ${INTERNAL_SERVICE_KEY:-dev-internal-service-key}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: ${POSTGRES_USER:-postgres}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      DB_NAME: society_realtime
+      LOG_FORMAT: json
+      NODE_ENV: production
+    ports:
+      - "3003:3003"
+      - "50052:50052"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      service-core:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3003/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  service-analytics:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.analytics
+    environment:
+      PORT: 3004
+      HOST: 0.0.0.0
+      GRPC_URL: 0.0.0.0:50053
+      LOG_FORMAT: json
+    ports:
+      - "3004:3004"
+      - "50053:50053"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:3004/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 8
+      start_period: 15s
+
+  gateway-bff:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.gateway
+    environment:
+      PORT: 3001
+      NODE_ENV: production
+      CORE_GRPC_URL: service-core:50051
+      REALTIME_GRPC_URL: service-realtime:50052
+      ANALYTICS_GRPC_URL: service-analytics:50053
+      CORS_ORIGINS: ${FRONTEND_ORIGIN:-http://localhost:3000}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:3000}
+      SWAGGER_ENABLED: "true"
+      LOG_FORMAT: json
+      SERVICE_NAME: gateway-bff
+      REDIS_URL: redis://redis:6379
+      THROTTLE_STORAGE: redis
+    ports:
+      - "3001:3001"
+    depends_on:
+      service-core:
+        condition: service_healthy
+      service-realtime:
+        condition: service_healthy
+      service-analytics:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  frontend-nextjs:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+        NEXT_PUBLIC_SOCKET_URL: ${NEXT_PUBLIC_SOCKET_URL:-http://localhost:3003}
+    environment:
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      gateway-bff:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  redisdata:

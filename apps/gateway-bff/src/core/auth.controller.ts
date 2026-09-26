@@ -1,4 +1,6 @@
 import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { CoreRbacService } from './core-rbac.service.js';
 import { ForgotPasswordDto } from './dto/forgot-password.dto.js';
 import { LoginDto } from './dto/login.dto.js';
@@ -7,7 +9,14 @@ import { RefreshDto } from './dto/refresh.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { ResetPasswordDto } from './dto/reset-password.dto.js';
 
+@ApiTags('auth')
 @Controller('auth')
+@Throttle({
+  default: {
+    limit: Number(process.env.THROTTLE_AUTH_LIMIT ?? 10),
+    ttl: Number(process.env.THROTTLE_AUTH_TTL_MS ?? 60_000),
+  },
+})
 export class AuthController {
   constructor(private readonly coreRbac: CoreRbacService) {}
 
@@ -32,6 +41,8 @@ export class AuthController {
   }
 
   @Post('logout-all')
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Revoke all refresh tokens for the current user' })
   logoutAll(@Headers('authorization') authorization?: string) {
     return this.coreRbac.logoutAll(this.extractBearer(authorization));
   }
@@ -73,6 +84,8 @@ export class AuthController {
   }
 
   @Get('me')
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Current user profile and permissions' })
   me(@Headers('authorization') authorization?: string) {
     return this.coreRbac.me(this.extractBearer(authorization));
   }

@@ -96,10 +96,7 @@ export class AuthGrpcController {
   @GrpcMethod('AuthService', 'ResetPassword')
   async resetPassword(data: { token: string; newPassword: string }) {
     try {
-      return await this.authService.resetPassword(
-        data.token,
-        data.newPassword,
-      );
+      return await this.authService.resetPassword(data.token, data.newPassword);
     } catch (error) {
       throw toRpcException(error);
     }

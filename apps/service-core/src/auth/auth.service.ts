@@ -256,7 +256,9 @@ export class AuthService {
       },
     });
     if (recent > 0) {
-      throw new BadRequestException('Please wait before requesting another OTP');
+      throw new BadRequestException(
+        'Please wait before requesting another OTP',
+      );
     }
 
     let userId: string | null = null;

@@ -28,12 +28,7 @@ import { UsersService } from './users.service.js';
     forwardRef(() => AuthModule),
   ],
   controllers: [UsersController, RolesController, PermissionsController],
-  providers: [
-    UsersService,
-    RolesService,
-    PermissionsService,
-    RbacSeedService,
-  ],
+  providers: [UsersService, RolesService, PermissionsService, RbacSeedService],
   exports: [TypeOrmModule, UsersService, RolesService, PermissionsService],
 })
 export class UserModule {}

@@ -1,9 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import {
-  GrpcHealthService,
-  HealthCheckResponse,
-} from './grpc-health.service';
+import { ApiTags } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
+import { GrpcHealthService, HealthCheckResponse } from './grpc-health.service';
 
+@ApiTags('health')
+@SkipThrottle({ default: true })
 @Controller('grpc/health')
 export class GrpcHealthController {
   constructor(private readonly grpcHealth: GrpcHealthService) {}
@@ -32,7 +33,10 @@ export class GrpcHealthController {
     ]);
 
     return {
-      core: core.status === 'fulfilled' ? core.value : { status: 'error', reason: String(core.reason) },
+      core:
+        core.status === 'fulfilled'
+          ? core.value
+          : { status: 'error', reason: String(core.reason) },
       realtime:
         realtime.status === 'fulfilled'
           ? realtime.value

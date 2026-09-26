@@ -1,0 +1,11 @@
+FROM python:3.12-slim AS runner
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV LOG_FORMAT=json
+COPY apps/service-analytics/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY apps/service-analytics ./
+COPY packages/shared-protos/proto /packages/shared-protos/proto
+EXPOSE 3004 50053
+CMD ["python", "-m", "app", "--no-reload"]

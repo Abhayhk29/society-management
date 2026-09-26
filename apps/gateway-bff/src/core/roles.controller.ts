@@ -9,6 +9,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import { PermissionsGuard } from '../auth/permissions.guard.js';
 import { RequirePermissions } from '../auth/require-permissions.decorator.js';
@@ -19,6 +20,8 @@ import {
   UpdateRoleDto,
 } from './dto/role.dto.js';
 
+@ApiTags('roles')
+@ApiBearerAuth('access-token')
 @Controller('roles')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @RequirePermissions('manage:roles')
@@ -41,10 +44,7 @@ export class RolesController {
   }
 
   @Patch(':uid')
-  update(
-    @Param('uid', ParseUUIDPipe) uid: string,
-    @Body() dto: UpdateRoleDto,
-  ) {
+  update(@Param('uid', ParseUUIDPipe) uid: string, @Body() dto: UpdateRoleDto) {
     return this.coreRbac.updateRole(
       uid,
       dto as unknown as Record<string, unknown>,

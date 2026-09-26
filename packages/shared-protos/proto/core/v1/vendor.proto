@@ -1,0 +1,362 @@
+syntax = "proto3";
+
+package society.core.v1;
+
+import "core/v1/user.proto";
+
+service VendorService {
+  rpc CreateVendor (CreateVendorRequest) returns (VendorResponse);
+  rpc ListVendors (ListVendorsRequest) returns (ListVendorsResponse);
+  rpc GetVendor (GetByIdRequest) returns (VendorResponse);
+  rpc UpdateVendor (UpdateVendorRequest) returns (VendorResponse);
+  rpc SubmitVendor (GetByIdRequest) returns (VendorResponse);
+  rpc ReviewVendor (ReviewVendorRequest) returns (VendorResponse);
+  rpc SuspendVendor (SuspendVendorRequest) returns (VendorResponse);
+  rpc AddVendorDocument (AddVendorDocumentRequest) returns (VendorDocumentResponse);
+  rpc ListVendorDocuments (GetByIdRequest) returns (ListVendorDocumentsResponse);
+  rpc VerifyVendorDocument (VerifyVendorDocumentRequest) returns (VendorDocumentResponse);
+  rpc AssignVendorSociety (AssignVendorSocietyRequest) returns (VendorSocietyResponse);
+  rpc ListVendorSocieties (GetByIdRequest) returns (ListVendorSocietiesResponse);
+  rpc UpdateVendorSociety (UpdateVendorSocietyRequest) returns (VendorSocietyResponse);
+}
+
+service WorkOrderService {
+  rpc CreateWorkOrder (CreateWorkOrderRequest) returns (WorkOrderResponse);
+  rpc ListWorkOrders (ListWorkOrdersRequest) returns (ListWorkOrdersResponse);
+  rpc GetWorkOrder (GetByIdRequest) returns (WorkOrderResponse);
+  rpc UpdateWorkOrder (UpdateWorkOrderRequest) returns (WorkOrderResponse);
+  rpc AssignWorkOrder (AssignWorkOrderRequest) returns (WorkOrderResponse);
+  rpc StartWorkOrder (ActorWorkOrderRequest) returns (WorkOrderResponse);
+  rpc CompleteWorkOrder (CompleteWorkOrderRequest) returns (WorkOrderResponse);
+  rpc VerifyWorkOrder (ActorWorkOrderRequest) returns (WorkOrderResponse);
+  rpc HoldWorkOrder (HoldWorkOrderRequest) returns (WorkOrderResponse);
+  rpc CancelWorkOrder (CancelWorkOrderRequest) returns (WorkOrderResponse);
+  rpc ProposeQuote (ProposeQuoteRequest) returns (WorkOrderQuoteResponse);
+  rpc DecideQuote (DecideQuoteRequest) returns (WorkOrderQuoteResponse);
+  rpc ListQuotes (GetByIdRequest) returns (ListQuotesResponse);
+  rpc ListEvents (GetByIdRequest) returns (ListWorkOrderEventsResponse);
+}
+
+message CreateVendorRequest {
+  string display_name = 1;
+  string company_name = 2;
+  string contact_phone = 3;
+  string contact_email = 4;
+  string categories = 5;
+  string gst_number = 6;
+  string pan_number = 7;
+  string address = 8;
+  string city = 9;
+  string notes = 10;
+  string user_id = 11;
+  bool has_user_id = 12;
+  string actor_user_id = 13;
+  bool submit_now = 14;
+}
+
+message UpdateVendorRequest {
+  string uid = 1;
+  string display_name = 2;
+  string company_name = 3;
+  string contact_phone = 4;
+  string contact_email = 5;
+  string categories = 6;
+  string gst_number = 7;
+  string pan_number = 8;
+  string address = 9;
+  string city = 10;
+  string notes = 11;
+  string user_id = 12;
+  bool has_display_name = 13;
+  bool has_company_name = 14;
+  bool has_contact_phone = 15;
+  bool has_contact_email = 16;
+  bool has_categories = 17;
+  bool has_gst_number = 18;
+  bool has_pan_number = 19;
+  bool has_address = 20;
+  bool has_city = 21;
+  bool has_notes = 22;
+  bool has_user_id = 23;
+  bool clear_user_id = 24;
+}
+
+message ListVendorsRequest {
+  string status = 1;
+  bool has_status = 2;
+  string society_id = 3;
+  bool has_society_id = 4;
+  string category = 5;
+  bool has_category = 6;
+}
+
+message ReviewVendorRequest {
+  string uid = 1;
+  bool approve = 2;
+  string rejection_reason = 3;
+  string actor_user_id = 4;
+}
+
+message SuspendVendorRequest {
+  string uid = 1;
+  string reason = 2;
+  string actor_user_id = 3;
+}
+
+message VendorResponse {
+  string uid = 1;
+  string display_name = 2;
+  string company_name = 3;
+  string contact_phone = 4;
+  string contact_email = 5;
+  string categories = 6;
+  string status = 7;
+  string gst_number = 8;
+  string pan_number = 9;
+  string address = 10;
+  string city = 11;
+  string notes = 12;
+  string user_id = 13;
+  string created_by_user_id = 14;
+  string reviewed_by_user_id = 15;
+  string reviewed_at = 16;
+  string rejection_reason = 17;
+  string created_at = 18;
+  string updated_at = 19;
+}
+
+message ListVendorsResponse {
+  repeated VendorResponse vendors = 1;
+}
+
+message AddVendorDocumentRequest {
+  string vendor_id = 1;
+  string doc_type = 2;
+  string label = 3;
+  string reference_or_url = 4;
+  string notes = 5;
+  string actor_user_id = 6;
+}
+
+message VerifyVendorDocumentRequest {
+  string uid = 1;
+  bool approve = 2;
+  string notes = 3;
+  string actor_user_id = 4;
+}
+
+message VendorDocumentResponse {
+  string uid = 1;
+  string vendor_id = 2;
+  string doc_type = 3;
+  string label = 4;
+  string reference_or_url = 5;
+  string status = 6;
+  string notes = 7;
+  string verified_by_user_id = 8;
+  string verified_at = 9;
+  string created_at = 10;
+  string updated_at = 11;
+}
+
+message ListVendorDocumentsResponse {
+  repeated VendorDocumentResponse documents = 1;
+}
+
+message AssignVendorSocietyRequest {
+  string vendor_id = 1;
+  string society_id = 2;
+  string notes = 3;
+  string actor_user_id = 4;
+}
+
+message UpdateVendorSocietyRequest {
+  string uid = 1;
+  string status = 2;
+  string notes = 3;
+  string actor_user_id = 4;
+}
+
+message VendorSocietyResponse {
+  string uid = 1;
+  string vendor_id = 2;
+  string society_id = 3;
+  string status = 4;
+  string notes = 5;
+  string approved_by_user_id = 6;
+  string approved_at = 7;
+  string created_at = 8;
+  string updated_at = 9;
+}
+
+message ListVendorSocietiesResponse {
+  repeated VendorSocietyResponse assignments = 1;
+}
+
+message CreateWorkOrderRequest {
+  string society_id = 1;
+  string flat_id = 2;
+  bool has_flat_id = 3;
+  string building_id = 4;
+  bool has_building_id = 5;
+  string title = 6;
+  string description = 7;
+  string category = 8;
+  string priority = 9;
+  string complaint_id = 10;
+  bool has_complaint_id = 11;
+  string scheduled_start_at = 12;
+  bool has_scheduled_start_at = 13;
+  string scheduled_end_at = 14;
+  bool has_scheduled_end_at = 15;
+  double cost_estimate = 16;
+  bool has_cost_estimate = 17;
+  string actor_user_id = 18;
+  bool open_now = 19;
+}
+
+message UpdateWorkOrderRequest {
+  string uid = 1;
+  string title = 2;
+  string description = 3;
+  string category = 4;
+  string priority = 5;
+  string scheduled_start_at = 6;
+  string scheduled_end_at = 7;
+  double cost_estimate = 8;
+  bool has_title = 9;
+  bool has_description = 10;
+  bool has_category = 11;
+  bool has_priority = 12;
+  bool has_scheduled_start_at = 13;
+  bool clear_scheduled_start_at = 14;
+  bool has_scheduled_end_at = 15;
+  bool clear_scheduled_end_at = 16;
+  bool has_cost_estimate = 17;
+  bool clear_cost_estimate = 18;
+  string actor_user_id = 19;
+}
+
+message ListWorkOrdersRequest {
+  string society_id = 1;
+  string status = 2;
+  bool has_status = 3;
+  string vendor_id = 4;
+  bool has_vendor_id = 5;
+  string category = 6;
+  bool has_category = 7;
+}
+
+message ActorWorkOrderRequest {
+  string uid = 1;
+  string actor_user_id = 2;
+}
+
+message AssignWorkOrderRequest {
+  string uid = 1;
+  string vendor_id = 2;
+  string actor_user_id = 3;
+  string scheduled_start_at = 4;
+  bool has_scheduled_start_at = 5;
+  string notes = 6;
+}
+
+message CompleteWorkOrderRequest {
+  string uid = 1;
+  string actor_user_id = 2;
+  double actual_cost = 3;
+  bool has_actual_cost = 4;
+  string resolution_notes = 5;
+}
+
+message HoldWorkOrderRequest {
+  string uid = 1;
+  string actor_user_id = 2;
+  string reason = 3;
+}
+
+message CancelWorkOrderRequest {
+  string uid = 1;
+  string actor_user_id = 2;
+  string reason = 3;
+}
+
+message ProposeQuoteRequest {
+  string work_order_id = 1;
+  string vendor_id = 2;
+  double amount = 3;
+  string notes = 4;
+  string actor_user_id = 5;
+}
+
+message DecideQuoteRequest {
+  string uid = 1;
+  bool accept = 2;
+  string actor_user_id = 3;
+  string notes = 4;
+}
+
+message WorkOrderResponse {
+  string uid = 1;
+  string society_id = 2;
+  string flat_id = 3;
+  string building_id = 4;
+  string title = 5;
+  string description = 6;
+  string category = 7;
+  string priority = 8;
+  string status = 9;
+  string requested_by_user_id = 10;
+  string assigned_vendor_id = 11;
+  string complaint_id = 12;
+  string scheduled_start_at = 13;
+  string scheduled_end_at = 14;
+  string completed_at = 15;
+  string verified_at = 16;
+  string verified_by_user_id = 17;
+  double cost_estimate = 18;
+  bool has_cost_estimate = 19;
+  double actual_cost = 20;
+  bool has_actual_cost = 21;
+  string currency = 22;
+  string resolution_notes = 23;
+  string created_at = 24;
+  string updated_at = 25;
+}
+
+message ListWorkOrdersResponse {
+  repeated WorkOrderResponse work_orders = 1;
+}
+
+message WorkOrderQuoteResponse {
+  string uid = 1;
+  string work_order_id = 2;
+  string vendor_id = 3;
+  double amount = 4;
+  string currency = 5;
+  string notes = 6;
+  string status = 7;
+  string proposed_by_user_id = 8;
+  string decided_at = 9;
+  string created_at = 10;
+  string updated_at = 11;
+}
+
+message ListQuotesResponse {
+  repeated WorkOrderQuoteResponse quotes = 1;
+}
+
+message WorkOrderEventResponse {
+  string uid = 1;
+  string work_order_id = 2;
+  string actor_user_id = 3;
+  string event_type = 4;
+  string from_status = 5;
+  string to_status = 6;
+  string message = 7;
+  string created_at = 8;
+}
+
+message ListWorkOrderEventsResponse {
+  repeated WorkOrderEventResponse events = 1;
+}

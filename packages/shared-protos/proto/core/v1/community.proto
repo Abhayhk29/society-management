@@ -1,0 +1,187 @@
+syntax = "proto3";
+
+package society.core.v1;
+
+import "core/v1/user.proto";
+
+service NoticeService {
+  rpc CreateNotice (CreateNoticeRequest) returns (NoticeResponse);
+  rpc ListNotices (ListNoticesRequest) returns (ListNoticesResponse);
+  rpc GetNotice (GetByIdRequest) returns (NoticeResponse);
+  rpc UpdateNotice (UpdateNoticeRequest) returns (NoticeResponse);
+  rpc DeleteNotice (GetByIdRequest) returns (NoticeResponse);
+}
+
+service ComplaintService {
+  rpc CreateComplaint (CreateComplaintRequest) returns (ComplaintResponse);
+  rpc ListComplaints (ListComplaintsRequest) returns (ListComplaintsResponse);
+  rpc GetComplaint (GetByIdRequest) returns (ComplaintResponse);
+  rpc UpdateComplaint (UpdateComplaintRequest) returns (ComplaintResponse);
+}
+
+service VisitorService {
+  rpc CreateVisitor (CreateVisitorRequest) returns (VisitorResponse);
+  rpc ListVisitors (ListVisitorsRequest) returns (ListVisitorsResponse);
+  rpc GetVisitor (GetByIdRequest) returns (VisitorResponse);
+  rpc UpdateVisitor (UpdateVisitorRequest) returns (VisitorResponse);
+  rpc CheckInVisitor (GetByIdRequest) returns (VisitorResponse);
+  rpc CheckOutVisitor (GetByIdRequest) returns (VisitorResponse);
+  rpc CancelVisitor (GetByIdRequest) returns (VisitorResponse);
+}
+
+message CreateNoticeRequest {
+  string society_id = 1;
+  string title = 2;
+  string body = 3;
+  string priority = 4;
+  string published_at = 5;
+  string expires_at = 6;
+  string actor_user_id = 7;
+  bool has_expires_at = 8;
+}
+
+message UpdateNoticeRequest {
+  string uid = 1;
+  string title = 2;
+  string body = 3;
+  string priority = 4;
+  string expires_at = 5;
+  bool is_active = 6;
+  bool has_title = 7;
+  bool has_body = 8;
+  bool has_priority = 9;
+  bool has_expires_at = 10;
+  bool clear_expires_at = 11;
+  bool has_is_active = 12;
+}
+
+message ListNoticesRequest {
+  string society_id = 1;
+  bool active_only = 2;
+}
+
+message NoticeResponse {
+  string uid = 1;
+  string society_id = 2;
+  string title = 3;
+  string body = 4;
+  string priority = 5;
+  string published_at = 6;
+  string expires_at = 7;
+  string created_by_user_id = 8;
+  bool is_active = 9;
+  string created_at = 10;
+  string updated_at = 11;
+}
+
+message ListNoticesResponse {
+  repeated NoticeResponse notices = 1;
+}
+
+message CreateComplaintRequest {
+  string society_id = 1;
+  string flat_id = 2;
+  string category = 3;
+  string title = 4;
+  string description = 5;
+  string actor_user_id = 6;
+  bool has_flat_id = 7;
+}
+
+message UpdateComplaintRequest {
+  string uid = 1;
+  string status = 2;
+  string assigned_to_user_id = 3;
+  string resolution_notes = 4;
+  bool has_status = 5;
+  bool has_assigned_to_user_id = 6;
+  bool clear_assigned_to_user_id = 7;
+  bool has_resolution_notes = 8;
+  bool clear_resolution_notes = 9;
+}
+
+message ListComplaintsRequest {
+  string society_id = 1;
+  string status = 2;
+  bool has_status = 3;
+}
+
+message ComplaintResponse {
+  string uid = 1;
+  string society_id = 2;
+  string flat_id = 3;
+  string raised_by_user_id = 4;
+  string category = 5;
+  string title = 6;
+  string description = 7;
+  string status = 8;
+  string assigned_to_user_id = 9;
+  string resolution_notes = 10;
+  string created_at = 11;
+  string updated_at = 12;
+  bool has_flat_id = 13;
+}
+
+message ListComplaintsResponse {
+  repeated ComplaintResponse complaints = 1;
+}
+
+message CreateVisitorRequest {
+  string society_id = 1;
+  string flat_id = 2;
+  string host_user_id = 3;
+  string visitor_name = 4;
+  string visitor_phone = 5;
+  string purpose = 6;
+  string expected_at = 7;
+  string gate_pass_id = 8;
+  string actor_user_id = 9;
+  bool has_flat_id = 10;
+  bool has_gate_pass_id = 11;
+}
+
+message UpdateVisitorRequest {
+  string uid = 1;
+  string visitor_name = 2;
+  string visitor_phone = 3;
+  string purpose = 4;
+  string expected_at = 5;
+  string gate_pass_id = 6;
+  bool has_visitor_name = 7;
+  bool has_visitor_phone = 8;
+  bool clear_visitor_phone = 9;
+  bool has_purpose = 10;
+  bool clear_purpose = 11;
+  bool has_expected_at = 12;
+  bool has_gate_pass_id = 13;
+  bool clear_gate_pass_id = 14;
+}
+
+message ListVisitorsRequest {
+  string society_id = 1;
+  string status = 2;
+  bool has_status = 3;
+}
+
+message VisitorResponse {
+  string uid = 1;
+  string society_id = 2;
+  string flat_id = 3;
+  string host_user_id = 4;
+  string visitor_name = 5;
+  string visitor_phone = 6;
+  string purpose = 7;
+  string expected_at = 8;
+  string status = 9;
+  string checked_in_at = 10;
+  string checked_out_at = 11;
+  string gate_pass_id = 12;
+  string created_at = 13;
+  string updated_at = 14;
+  bool has_flat_id = 15;
+  bool has_gate_pass_id = 16;
+}
+
+message ListVisitorsResponse {
+  repeated VisitorResponse visitors = 1;
+}

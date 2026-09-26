@@ -27,6 +27,11 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.1",
+    "@types/ioredis": "^4.28.10",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@nest-lab/throttler-storage-redis": "^1.2.0",
+    "ioredis": "^5.11.1"
   }
 }

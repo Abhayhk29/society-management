@@ -9,6 +9,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import { PermissionsGuard } from '../auth/permissions.guard.js';
 import { RequirePermissions } from '../auth/require-permissions.decorator.js';
@@ -18,6 +19,8 @@ import {
   UpdatePermissionDto,
 } from './dto/permission.dto.js';
 
+@ApiTags('permissions')
+@ApiBearerAuth('access-token')
 @Controller('permissions')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @RequirePermissions('manage:permissions')

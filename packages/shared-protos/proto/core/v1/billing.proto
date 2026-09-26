@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package society.core.v1;
+
+import "core/v1/user.proto";
+
+service BillService {
+  rpc CreateBill (CreateBillRequest) returns (BillResponse);
+  rpc ListBills (ListBillsRequest) returns (ListBillsResponse);
+  rpc GetBill (GetByIdRequest) returns (BillResponse);
+  rpc UpdateBill (UpdateBillRequest) returns (BillResponse);
+  rpc CancelBill (GetByIdRequest) returns (BillResponse);
+  rpc IssueBill (GetByIdRequest) returns (BillResponse);
+}
+
+service PaymentService {
+  rpc PayBill (PayBillRequest) returns (PaymentResponse);
+  rpc ListPaymentsByBill (GetByIdRequest) returns (ListPaymentsResponse);
+  rpc GetPayment (GetByIdRequest) returns (PaymentResponse);
+}
+
+service ReceiptService {
+  rpc GetReceipt (GetByIdRequest) returns (ReceiptResponse);
+  rpc GetReceiptByPayment (GetByIdRequest) returns (ReceiptResponse);
+  rpc ListReceiptsBySociety (ListReceiptsRequest) returns (ListReceiptsResponse);
+}
+
+message CreateBillRequest {
+  string society_id = 1;
+  string flat_id = 2;
+  string membership_id = 3;
+  string title = 4;
+  string category = 5;
+  double amount = 6;
+  string currency = 7;
+  string due_date = 8;
+  string notes = 9;
+  bool issue_now = 10;
+  string actor_user_id = 11;
+  bool has_flat_id = 12;
+  bool has_membership_id = 13;
+}
+
+message UpdateBillRequest {
+  string uid = 1;
+  string title = 2;
+  string category = 3;
+  double amount = 4;
+  string due_date = 5;
+  string notes = 6;
+  bool has_title = 7;
+  bool has_category = 8;
+  bool has_amount = 9;
+  bool has_due_date = 10;
+  bool has_notes = 11;
+  bool clear_notes = 12;
+}
+
+message ListBillsRequest {
+  string society_id = 1;
+  string status = 2;
+  bool has_status = 3;
+}
+
+message BillResponse {
+  string uid = 1;
+  string society_id = 2;
+  string flat_id = 3;
+  string membership_id = 4;
+  string title = 5;
+  string category = 6;
+  double amount = 7;
+  string currency = 8;
+  string due_date = 9;
+  string status = 10;
+  string issued_at = 11;
+  string notes = 12;
+  string created_by_user_id = 13;
+  double paid_amount = 14;
+  string created_at = 15;
+  string updated_at = 16;
+  bool has_flat_id = 17;
+  bool has_membership_id = 18;
+}
+
+message ListBillsResponse {
+  repeated BillResponse bills = 1;
+}
+
+message PayBillRequest {
+  string bill_id = 1;
+  double amount = 2;
+  string method = 3;
+  string reference = 4;
+  string actor_user_id = 5;
+}
+
+message PaymentResponse {
+  string uid = 1;
+  string bill_id = 2;
+  double amount = 3;
+  string method = 4;
+  string reference = 5;
+  string paid_by_user_id = 6;
+  string paid_at = 7;
+  string status = 8;
+  string receipt_id = 9;
+  string receipt_number = 10;
+  string created_at = 11;
+  bool has_receipt = 12;
+}
+
+message ListPaymentsResponse {
+  repeated PaymentResponse payments = 1;
+}
+
+message ReceiptResponse {
+  string uid = 1;
+  string payment_id = 2;
+  string bill_id = 3;
+  string society_id = 4;
+  string receipt_number = 5;
+  string issued_at = 6;
+  string snapshot_json = 7;
+  string created_at = 8;
+}
+
+message ListReceiptsRequest {
+  string society_id = 1;
+}
+
+message ListReceiptsResponse {
+  repeated ReceiptResponse receipts = 1;
+}

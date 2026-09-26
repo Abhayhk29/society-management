@@ -1,0 +1,170 @@
+.page {
+  min-height: 100vh;
+  padding: 1.5rem 4vw 3rem;
+  animation: fadeIn 0.45s ease both;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--moss-deep);
+}
+
+.muted {
+  color: var(--stone);
+}
+
+.linkBtn {
+  min-height: 2.5rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+}
+
+.toolbar {
+  margin-bottom: 1rem;
+}
+
+.toolbar label {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 320px;
+  font-size: 0.9rem;
+  color: var(--stone);
+}
+
+.toolbar select,
+.card input,
+.card textarea {
+  min-height: 2.6rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.card textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
+  animation: riseIn 0.5s ease both;
+}
+
+.card h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.card label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.875rem;
+  color: var(--stone);
+}
+
+.card button,
+.actions button {
+  min-height: 2.7rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--moss);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+.card button:disabled,
+.actions button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.secondary {
+  background: transparent !important;
+  color: var(--moss-deep) !important;
+  border: 1px solid var(--line) !important;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.list button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  padding: 0.75rem 0.9rem;
+  text-align: left;
+}
+
+.qr {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+}
+
+.qr code {
+  font-size: 0.7rem;
+  word-break: break-all;
+  color: var(--stone);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.metaLine {
+  font-size: 0.9rem;
+  color: var(--stone);
+}
+
+.error {
+  color: var(--danger);
+  margin-bottom: 0.75rem;
+}
+
+.success {
+  color: var(--moss-deep);
+  margin-bottom: 0.75rem;
+}

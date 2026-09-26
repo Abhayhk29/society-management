@@ -42,10 +42,7 @@ export class UsersController {
 
   @Patch(':uid')
   @RequirePermissions('update:user')
-  update(
-    @Param('uid', ParseUUIDPipe) uid: string,
-    @Body() dto: UpdateUserDto,
-  ) {
+  update(@Param('uid', ParseUUIDPipe) uid: string, @Body() dto: UpdateUserDto) {
     return this.usersService.update(uid, dto);
   }
 

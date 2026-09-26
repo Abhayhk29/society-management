@@ -22,9 +22,7 @@ export class JwtAuthGuard implements CanActivate {
     if (context.getType() === 'http') {
       context.switchToHttp().getRequest().user = user;
     } else {
-      const rpcContext = context.switchToRpc().getContext() as Metadata & {
-        user?: unknown;
-      };
+      const rpcContext = context.switchToRpc().getContext();
       rpcContext.user = user;
     }
 
@@ -33,17 +31,19 @@ export class JwtAuthGuard implements CanActivate {
 
   private extractToken(context: ExecutionContext): string | null {
     if (context.getType() === 'http') {
-      const header = context.switchToHttp().getRequest()
-        .headers?.authorization as string | undefined;
+      const header = context.switchToHttp().getRequest().headers
+        ?.authorization as string | undefined;
       return this.fromBearer(header);
     }
 
-    const metadata = context.switchToRpc().getContext() as Metadata;
+    const metadata = context.switchToRpc().getContext();
     const values =
       metadata?.get?.('authorization') ??
       metadata?.get?.('Authorization') ??
       [];
-    const raw = Array.isArray(values) ? String(values[0] ?? '') : String(values);
+    const raw = Array.isArray(values)
+      ? String(values[0] ?? '')
+      : String(values);
     return this.fromBearer(raw);
   }
 
